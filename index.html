@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deep Ocean Aquarium</title>
+
+    <title>Deep Ocean Aquarium by Hinz</title>
 
     <style>
-        /* =========================
-           CÀI ĐẶT CHUNG
-        ========================= */
+        /* =====================================================
+   RESET
+===================================================== */
 
         * {
             margin: 0;
@@ -30,9 +31,9 @@
         }
 
 
-        /* =========================
-           KHUNG MÀN HÌNH
-        ========================= */
+        /* =====================================================
+   KHUNG TRANG
+===================================================== */
 
         #cuon {
             width: 96vw;
@@ -44,115 +45,86 @@
         }
 
 
-        /* =========================
-           KHU VỰC NÚT
-        ========================= */
+        /* =====================================================
+   CONTROL PANEL
+===================================================== */
 
         #control-panel {
             width: 100%;
-            height: 23.33vh;
-            background: #111;
+            min-height: 23.33vh;
 
             display: flex;
             justify-content: flex-end;
             align-items: flex-start;
+            flex-wrap: wrap;
             gap: 10px;
 
             padding: 20px;
+
+            background: #111;
+        }
+
+        #control-panel button {
+            padding: 10px 16px;
+
+            border: 2px solid #5ddcff;
+            border-radius: 10px;
+
+            background: #176b91;
+            color: white;
+
+            font-size: 15px;
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        #control-panel button:hover {
+            background: #238bb5;
+            transform: translateY(-2px);
         }
 
 
         /* Nút âm thanh */
 
         #musicBtn {
-            padding: 12px 20px;
-            border: 0;
-            border-radius: 10px;
-
-            background: #075985;
-            color: white;
-
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-
-        /* Nút đổi background */
-
-        #bgBtn {
-            padding: 10px 16px;
-
-            border: 2px solid #5ddcff;
-            border-radius: 10px;
-
-            background: #176b91;
-            color: white;
-
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        #bgBtn:hover {
-            background: #238bb5;
-        }
-
-
-        /* Nút đổi nhạc */
-
-        #musicChangeBtn {
-            padding: 10px 16px;
-
-            border: 2px solid #5ddcff;
-            border-radius: 10px;
-
-            background: #176b91;
-            color: white;
-
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        #musicChangeBtn:hover {
-            background: #238bb5;
+            padding: 12px 20px !important;
+            background: #075985 !important;
+            border: 0 !important;
+            font-size: 16px !important;
         }
 
 
         /* Nút cho cá ăn */
 
         #foodBtn {
-            padding: 10px 16px;
-
-            border: 2px solid #ffd966;
-            border-radius: 10px;
-
-            background: #d99a16;
-            color: white;
-
-            cursor: pointer;
-            font-size: 15px;
+            border-color: #ffd966 !important;
+            background: #d99a16 !important;
         }
 
         #foodBtn:hover {
-            background: #f0b429;
+            background: #f0b429 !important;
         }
 
         #foodBtn.active {
-            background: #f0b429;
-            box-shadow: 0 0 12px rgba(255, 217, 102, .8);
+            background: #f0b429 !important;
+            box-shadow:
+                0 0 12px rgba(255, 217, 102, .8);
         }
 
 
-        /* =========================
-           HỒ CÁ
-        ========================= */
+        /* =====================================================
+   HỒ CÁ
+===================================================== */
 
         #aquarium {
+            position: relative;
+
             width: 96%;
             height: 100vh;
 
-            margin: 0 auto;
+            margin: auto;
 
-            position: relative;
             overflow: hidden;
 
             border: 12px solid #9de8ff;
@@ -165,13 +137,12 @@
         }
 
 
-        /* =========================
-           BACKGROUND HỒ CÁ
-        ========================= */
+        /* =====================================================
+   BACKGROUND
+===================================================== */
 
         .tank-bg {
             position: absolute;
-
             inset: 0;
 
             background-image: url("images/bg1.jpg");
@@ -183,9 +154,9 @@
         }
 
 
-        /* =========================
-           CÁT ĐÁY HỒ
-        ========================= */
+        /* =====================================================
+   CÁT
+===================================================== */
 
         .sand {
             position: absolute;
@@ -207,28 +178,215 @@
                     #b59555,
                     #6c4f21);
 
-            z-index: 1;
+            z-index: 10;
         }
 
 
-        /* =========================
-           CÁ
-        ========================= */
+        /* =====================================================
+   ĐÁ
+===================================================== */
+
+        .rock {
+            position: absolute;
+
+            bottom: 16%;
+
+            width: 90px;
+            height: 45px;
+
+            border-radius:
+                55% 45% 40% 50%;
+
+            background:
+                linear-gradient(to bottom,
+                    #777,
+                    #3d3d3d);
+
+            box-shadow:
+                inset -8px -5px 10px rgba(0, 0, 0, .4),
+                0 3px 5px rgba(0, 0, 0, .4);
+
+            z-index: 15;
+        }
+
+        .rock1 {
+            left: 8%;
+        }
+
+        .rock2 {
+            left: 70%;
+            width: 110px;
+            height: 50px;
+        }
+
+        .rock3 {
+            left: 45%;
+            width: 60px;
+            height: 35px;
+        }
+
+
+        /* =====================================================
+   RONG BIỂN
+===================================================== */
+
+        .seaweed {
+            position: absolute;
+
+            bottom: 17%;
+
+            width: 12px;
+            height: 100px;
+
+            border-radius: 100%;
+
+            background:
+                linear-gradient(to right,
+                    #14532d,
+                    #22c55e,
+                    #14532d);
+
+            transform-origin: bottom;
+
+            z-index: 12;
+
+            animation:
+                sway 3s ease-in-out infinite alternate;
+        }
+
+        .seaweed1 {
+            left: 15%;
+            height: 90px;
+        }
+
+        .seaweed2 {
+            left: 18%;
+            height: 120px;
+            animation-delay: .5s;
+        }
+
+        .seaweed3 {
+            left: 78%;
+            height: 110px;
+            animation-delay: 1s;
+        }
+
+        .seaweed4 {
+            left: 82%;
+            height: 80px;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes sway {
+
+            from {
+                transform: rotate(-5deg);
+            }
+
+            to {
+                transform: rotate(8deg);
+            }
+        }
+
+
+        /* =====================================================
+   BONG BÓNG
+===================================================== */
+
+        .bubble {
+            position: absolute;
+
+            bottom: 18%;
+
+            width: 10px;
+            height: 10px;
+
+            border: 2px solid white;
+            border-radius: 50%;
+
+            z-index: 25;
+
+            animation:
+                bubbleUp 4s linear infinite;
+        }
+
+        .bubble1 {
+            left: 18%;
+        }
+
+        .bubble2 {
+            left: 21%;
+            animation-delay: 1s;
+        }
+
+        .bubble3 {
+            left: 76%;
+            animation-delay: .5s;
+        }
+
+        .bubble4 {
+            left: 80%;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes bubbleUp {
+
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+
+            15% {
+                opacity: .8;
+            }
+
+            100% {
+                transform: translateY(-400px);
+                opacity: 0;
+            }
+        }
+
+
+        /* =====================================================
+   CÁ
+===================================================== */
 
         .fish {
             position: absolute;
+
+            z-index: 20;
 
             animation-timing-function: linear;
             animation-iteration-count: infinite;
             animation-play-state: running;
 
-            transform: scaleX(1);
-
-            z-index: 2;
+            pointer-events: none;
         }
 
 
-        /* Kích thước cá */
+        /*
+   Khung bên trong dùng cho moi.js.
+
+   KHÔNG dùng scaleX ở đây.
+*/
+
+        .fish-direction {
+            width: 100%;
+            height: 100%;
+
+            transform-origin: center;
+        }
+
+        .fish-direction img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+
+        /* =====================================================
+   KÍCH THƯỚC CÁ
+===================================================== */
 
         .big img {
             width: 250px;
@@ -245,15 +403,10 @@
             height: 70px;
         }
 
-        .mini img {
-            width: 80px;
-            height: 50px;
-        }
 
-
-        /* =========================
-           ĐƯỜNG ĐI CỦA CÁ
-        ========================= */
+        /* =====================================================
+   ROUTE
+===================================================== */
 
         .route1 {
             animation-name: Shark1;
@@ -276,32 +429,32 @@
         }
 
 
-        /* =========================
-           TỐC ĐỘ CÁ
-        ========================= */
+        /* =====================================================
+   TỐC ĐỘ
+===================================================== */
 
         .speed1 {
-            animation-duration: 8s;
+            animation-duration: 10s;
         }
 
         .speed2 {
-            animation-duration: 12s;
-        }
-
-        .speed3 {
             animation-duration: 15s;
         }
 
-        .speed4 {
-            animation-duration: 18s;
-        }
-
-        .speed5 {
+        .speed3 {
             animation-duration: 20s;
         }
 
-        .speed6 {
+        .speed4 {
             animation-duration: 25s;
+        }
+
+        .speed5 {
+            animation-duration: 30s;
+        }
+
+        .speed6 {
+            animation-duration: 35s;
         }
 
 
@@ -364,9 +517,11 @@
     99.999%{left:80%;top:55%;transform:scaleX(1);}
     100%{left:80%;top:55%;transform:scaleX(-1);}
 }
-        /* =========================
-           MỒI XEM TRƯỚC
-        ========================= */
+
+
+        /* =====================================================
+   MỒI XEM TRƯỚC
+===================================================== */
 
         .bait-preview {
             position: absolute;
@@ -376,21 +531,22 @@
 
             background: #8b4513;
             border: 2px solid #5c2d0c;
-
             border-radius: 50%;
 
             pointer-events: none;
+
             z-index: 50;
 
-            transform: translate(-50%, -50%);
+            transform:
+                translate(-50%, -50%);
 
             opacity: .65;
         }
 
 
-        /* =========================
-           MỒI THẬT
-        ========================= */
+        /* =====================================================
+   MỒI THẬT
+===================================================== */
 
         .bait {
             position: absolute;
@@ -403,45 +559,50 @@
 
             border-radius: 50%;
 
-            z-index: 10;
+            z-index: 50;
 
-            transform: translate(-50%, -50%);
+            transform:
+                translate(-50%, -50%);
 
-            box-shadow: 0 0 5px rgba(255, 200, 80, .8);
+            box-shadow:
+                0 0 5px rgba(255, 200, 80, .8);
         }
 
 
-        /* =========================
-           TÊN
-        ========================= */
+        /* =====================================================
+   TÊN
+===================================================== */
 
         #name-banner {
             height: 10vh;
-
-            background: linear-gradient(to bottom,
-                    #176b91,
-                    #0b3f5a);
-
-            color: white;
 
             display: flex;
             justify-content: center;
             align-items: center;
 
+            background:
+                linear-gradient(to bottom,
+                    #176b91,
+                    #0b3f5a);
+
+            color: white;
+
             font-size: 22px;
             font-weight: bold;
+
             letter-spacing: 1px;
 
-            border-top: 3px solid #5ddcff;
+            border-top:
+                3px solid #5ddcff;
 
             box-shadow:
                 0 -5px 15px rgba(47, 168, 226, .4);
         }
 
 
-        /* =========================
-           MÀN HÌNH NHỎ
-        ========================= */
+        /* =====================================================
+   MOBILE
+===================================================== */
 
         @media(max-width:700px) {
 
@@ -451,12 +612,33 @@
 
             #aquarium {
                 width: 96%;
+                height: 80vh;
             }
 
             #control-panel {
-                flex-wrap: wrap;
+                justify-content: center;
+                min-height: auto;
             }
 
+            #control-panel button {
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+
+            .big img {
+                width: 180px;
+                height: auto;
+            }
+
+            .medium img {
+                width: 140px;
+                height: auto;
+            }
+
+            .small img {
+                width: 100px;
+                height: auto;
+            }
         }
     </style>
 </head>
@@ -467,9 +649,9 @@
     <div id="cuon">
 
 
-        <!-- =========================
-             KHU VỰC NÚT
-        ========================= -->
+        <!-- =================================================
+         NÚT
+    ================================================= -->
 
         <div id="control-panel">
 
@@ -492,9 +674,9 @@
         </div>
 
 
-        <!-- =========================
-             HỒ CÁ
-        ========================= -->
+        <!-- =================================================
+         HỒ CÁ
+    ================================================= -->
 
         <div id="aquarium">
 
@@ -502,40 +684,168 @@
 
             <div class="sand"></div>
 
-        <div class="fish medium route1 speed1"><img src="images/shark1.gif" alt="1"></div>
-        <div class="fish medium route5 speed1"><img src="images/shark2.gif" alt="2"></div>
-        <div class="fish small route3 speed6"><img src="images/shark3.gif" alt="3"></div>
-        <div class="fish big route4 speed2"><img src="images/shark4.gif" alt="4"></div>
-        <div class="fish medium route3 speed2"><img src="images/shark5.gif" alt="1"></div>
-        <div class="fish small route2 speed3"><img src="images/shark6.gif" alt="2"></div>
-        <div class="fish medium route5 speed4"><img src="images/shark3.gif" alt="3"></div>
-        <div class="fish small route3 speed1"><img src="images/shark4.gif" alt="4"></div>
+
+            <!-- ĐÁ -->
+
+            <div class="rock rock1"></div>
+            <div class="rock rock2"></div>
+            <div class="rock rock3"></div>
+
+
+            <!-- RONG -->
+
+            <div class="seaweed seaweed1"></div>
+            <div class="seaweed seaweed2"></div>
+            <div class="seaweed seaweed3"></div>
+            <div class="seaweed seaweed4"></div>
+
+
+            <!-- BONG BÓNG -->
+
+            <div class="bubble bubble1"></div>
+            <div class="bubble bubble2"></div>
+            <div class="bubble bubble3"></div>
+            <div class="bubble bubble4"></div>
+
+
+            <!-- =================================================
+             CÁ
+        ================================================= -->
+
+
+            <!-- CÁ 1 -->
+
+            <div class="fish medium route1 speed1">
+
+                <div class="fish-direction">
+
+                    <img src="images/shark1.gif" alt="Cá 1">
+
+                </div>
+
+            </div>
+
+
+            <!-- CÁ 2 -->
+
+            <div class="fish medium route5 speed1">
+
+                <div class="fish-direction">
+
+                    <img src="images/shark2.gif" alt="Cá 2">
+
+                </div>
+
+            </div>
+
+
+            <!-- CÁ 3 -->
+
+            <div class="fish small route3 speed6">
+
+                <div class="fish-direction">
+
+                    <img src="images/shark3.gif" alt="Cá 3">
+
+                </div>
+
+            </div>
+
+
+            <!-- CÁ 4 -->
+
+            <div class="fish big route4 speed2">
+
+                <div class="fish-direction">
+
+                    <img src="images/shark4.gif" alt="Cá 4">
+
+                </div>
+
+            </div>
+
+
+            <!-- CÁ 5 -->
+
+            <div class="fish medium route3 speed2">
+
+                <div class="fish-direction">
+
+                    <img src="images/shark5.gif" alt="Cá 5">
+
+                </div>
+
+            </div>
+
+
+            <!-- CÁ 6 -->
+
+            <div class="fish small route2 speed3">
+
+                <div class="fish-direction">
+
+                    <img src="images/shark6.gif" alt="Cá 6">
+
+                </div>
+
+            </div>
+
+
+            <!-- CÁ 7 -->
+
+            <div class="fish medium route5 speed4">
+
+                <div class="fish-direction">
+
+                    <img src="images/shark3.gif" alt="Cá 7">
+
+                </div>
+
+            </div>
+
+
+            <!-- CÁ 8 -->
+
+            <div class="fish medium route3 speed1">
+
+                <div class="fish-direction">
+
+                    <img src="images/shark4.gif" alt="Cá 8">
+
+                </div>
+
+            </div>
+
         </div>
 
 
-        <!-- =========================
-             TÊN
-        ========================= -->
+        <!-- =================================================
+         TÊN
+    ================================================= -->
 
         <div id="name-banner">
+
             🐋 Nguyễn Đỗ Diệu Hiền 🐋
+
         </div>
 
     </div>
 
 
-    <!-- =========================
-         ÂM THANH
-    ========================= -->
+    <!-- =================================================
+     ÂM THANH
+================================================= -->
 
     <audio id="bgm" loop>
+
         <source src="s1.mp3" type="audio/mpeg">
+
     </audio>
 
 
-    <!-- =========================
-         JAVASCRIPT
-    ========================= -->
+    <!-- =================================================
+     JAVASCRIPT
+================================================= -->
 
     <script src="nut.js"></script>
     <script src="moi.js"></script>
