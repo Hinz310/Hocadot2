@@ -1,555 +1,220 @@
-/* =========================
-   CHO CÁ ĂN
-========================= */
-
 const aquarium = document.getElementById("aquarium");
 const foodBtn = document.getElementById("foodBtn");
 
 let feedMode = false;
 let baitPreview = null;
-let bait = null;
+let baits = [];
 
 
-/* =========================
-   BẬT / TẮT CHẾ ĐỘ CHO ĂN
-========================= */
+// ================================
+// BẬT / TẮT CHẾ ĐỘ CHO CÁ ĂN
+// ================================
 
-function toggleFeedMode(){
+function toggleFeedMode() {
 
     feedMode = !feedMode;
 
-    if(feedMode){
-
+    if (feedMode) {
         foodBtn.classList.add("active");
-        foodBtn.innerHTML = "Đang cho cá ăn";
+        foodBtn.innerHTML = "🍖 Đang cho cá ăn";
 
-        console.log("Đã bật chế độ cho cá ăn");
-
-    }else{
-
+        createPreview();
+    } else {
         foodBtn.classList.remove("active");
-        foodBtn.innerHTML = "Cho cá ăn";
+        foodBtn.innerHTML = "🍖 Cho cá ăn";
 
         removePreview();
-
-        console.log("Đã tắt chế độ cho cá ăn");
     }
 }
 
 
-/* =========================
-   MỒI XEM TRƯỚC
-========================= */
+// ================================
+// TẠO MỒI XEM TRƯỚC
+// ================================
 
-function previewBait(e){
+function createPreview() {
 
-    if(!feedMode || bait) return;
+    if (baitPreview) return;
 
-    const rect = aquarium.getBoundingClientRect();
+    baitPreview = document.createElement("div");
+    baitPreview.className = "bait-preview";
 
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-
-    if(!baitPreview){
-
-        baitPreview = document.createElement("div");
-
-        baitPreview.className = "bait";
-
-        baitPreview.style.opacity = "0.5";
-
-        aquarium.appendChild(baitPreview);
-    }
-
-
-    baitPreview.style.left = x + "px";
-    baitPreview.style.top = y + "px";
+    aquarium.appendChild(baitPreview);
 }
 
 
-/* =========================
-   THẢ MỒI
-========================= */
+// ================================
+// XÓA MỒI XEM TRƯỚC
+// ================================
 
-function dropBait(e){
+function removePreview() {
 
-    if(!feedMode || bait) return;
-
-    const rect = aquarium.getBoundingClientRect();
-
-    const x = e.clientX - rect.left;
-    const targetY = e.clientY - rect.top;
-
-
-    removePreview();
-
-
-    /* Tạo mồi */
-
-    bait = document.createElement("div");
-
-    bait.className = "bait";
-
-    aquarium.appendChild(bait);
-
-
-    bait.style.left = x + "px";
-    bait.style.top = "20px";
-
-
-    console.log("Mồi bắt đầu rơi");
-
-
-    /* Mồi rơi xuống */
-
-    const fall = bait.animate(
-        [
-            { top:"20px" },
-            { top:targetY + "px" }
-        ],
-        {
-            duration:1200,
-            easing:"ease-out",
-            fill:"forwards"
-        }
-    );
-
-
-    fall.onfinish = function(){
-
-        console.log("Mồi đã rơi xuống");
-
-        findFish(x,targetY);
-    };
-}
-
-
-/* =========================
-   TÌM CÁ GẦN NHẤT
-========================= */
-
-function findFish(foodX,foodY){
-
-    const fishes =
-        document.querySelectorAll(".fish");
-
-
-    let nearestFish = null;
-    let nearestDistance = Infinity;
-
-
-    fishes.forEach(fish => {
-
-        const directionBox =
-            fish.querySelector(".fish-direction");
-
-        if(!directionBox) return;
-
-
-        const fishRect =
-            directionBox.getBoundingClientRect();
-
-        const aquariumRect =
-            aquarium.getBoundingClientRect();
-
-
-        const fishX =
-            fishRect.left -
-            aquariumRect.left +
-            fishRect.width / 2;
-
-
-        const fishY =
-            fishRect.top -
-            aquariumRect.top +
-            fishRect.height / 2;
-
-
-        const distance =
-            Math.hypot(
-                foodX - fishX,
-                foodY - fishY
-            );
-
-
-        if(distance < nearestDistance){
-
-            nearestDistance = distance;
-
-            nearestFish = fish;
-        }
-
-    });
-
-
-    if(nearestFish){
-
-        console.log(
-            "Đã tìm thấy cá gần mồi"
-        );
-
-
-        swimToFood(
-            nearestFish,
-            foodX,
-            foodY
-        );
-    }
-}
-
-
-/* =========================
-   CÁ BƠI TỚI MỒI
-========================= */
-
-function swimToFood(
-    fish,
-    foodX,
-    foodY
-){
-
-    const directionBox =
-        fish.querySelector(".fish-direction");
-
-
-    if(!directionBox){
-
-        console.warn(
-            "Không tìm thấy .fish-direction"
-        );
-
-        return;
-    }
-
-
-    /* Dừng route CSS */
-
-    fish.style.animationPlayState =
-        "paused";
-
-
-    const aquariumRect =
-        aquarium.getBoundingClientRect();
-
-
-    const fishRect =
-        directionBox.getBoundingClientRect();
-
-
-    /* Vị trí hiện tại */
-
-    const startX =
-        fishRect.left -
-        aquariumRect.left;
-
-
-    const startY =
-        fishRect.top -
-        aquariumRect.top;
-
-
-    /* Vị trí đích */
-
-    const targetX =
-        foodX -
-        fishRect.width / 2;
-
-
-    const targetY =
-        foodY -
-        fishRect.height / 2;
-
-
-    const dx =
-        targetX -
-        startX;
-
-
-    const dy =
-        targetY -
-        startY;
-
-
-    const distance =
-        Math.hypot(dx,dy);
-
-
-    /* =========================
-       QUAY ĐẦU NGAY LẬP TỨC
-    ========================= */
-
-    const direction =
-        dx >= 0 ? 1 : -1;
-
-
-    directionBox.style.transform =
-        `scaleX(${direction})`;
-
-
-    console.log(
-        direction === 1
-            ? "Cá quay sang phải"
-            : "Cá quay sang trái"
-    );
-
-
-    /* =========================
-       TỐC ĐỘ
-    ========================= */
-
-    const speed = 0.45;
-
-
-    const duration =
-        Math.max(
-            800,
-            distance / speed
-        );
-
-
-    const startTime =
-        performance.now();
-
-
-    /* =========================
-       BƠI TỚI MỒI
-    ========================= */
-
-    function moveToFood(currentTime){
-
-        const elapsed =
-            currentTime -
-            startTime;
-
-
-        let progress =
-            elapsed / duration;
-
-
-        progress =
-            Math.min(progress,1);
-
-
-        /* Chuyển động mềm */
-
-        const ease =
-            progress *
-            (2 - progress);
-
-
-        const moveX =
-            dx * ease;
-
-
-        const moveY =
-            dy * ease;
-
-
-        directionBox.style.transform =
-            `translate(${moveX}px,${moveY}px)
-             scaleX(${direction})`;
-
-
-        if(progress < 1){
-
-            requestAnimationFrame(
-                moveToFood
-            );
-
-            return;
-        }
-
-
-        console.log(
-            "Cá đã tới gần mồi"
-        );
-
-
-        eatBait(
-            fish,
-            directionBox,
-            moveX,
-            moveY,
-            direction
-        );
-    }
-
-
-    requestAnimationFrame(
-        moveToFood
-    );
-}
-
-
-/* =========================
-   CÁ ĂN MỒI
-========================= */
-
-function eatBait(
-    fish,
-    directionBox,
-    moveX,
-    moveY,
-    direction
-){
-
-    console.log(
-        "Cá đã ăn mồi"
-    );
-
-
-    /* =========================
-       MỒI BIẾN MẤT
-    ========================= */
-
-    if(bait){
-
-        const eat =
-            bait.animate(
-                [
-                    {
-                        transform:
-                            "translate(-50%,-50%) scale(1)",
-                        opacity:1
-                    },
-
-                    {
-                        transform:
-                            "translate(-50%,-50%) scale(0)",
-                        opacity:0
-                    }
-                ],
-                {
-                    duration:250,
-                    fill:"forwards"
-                }
-            );
-
-
-        eat.onfinish = function(){
-
-            if(bait){
-
-                bait.remove();
-
-                bait = null;
-            }
-
-        };
-    }
-
-
-    /* =========================
-       TRẢ CÁ VỀ ROUTE
-    ========================= */
-
-    setTimeout(function(){
-
-        /*
-         * Route CSS vẫn đang
-         * đứng ở vị trí cũ.
-         *
-         * Cá đang lệch bởi
-         * translate().
-         *
-         * Ta đưa translate về 0
-         * trước khi chạy tiếp.
-         */
-
-        const returnMove =
-            directionBox.animate(
-                [
-                    {
-                        transform:
-                            `translate(${moveX}px,${moveY}px)
-                             scaleX(${direction})`
-                    },
-
-                    {
-                        transform:
-                            `translate(0,0)
-                             scaleX(${direction})`
-                    }
-                ],
-                {
-                    duration:500,
-                    easing:"ease-out",
-                    fill:"forwards"
-                }
-            );
-
-
-        returnMove.onfinish = function(){
-
-            /*
-             * Xóa transform tạm thời.
-             */
-
-            directionBox.style.transform =
-                "";
-
-
-            /*
-             * Cho route CSS chạy tiếp.
-             */
-
-            fish.style.animationPlayState =
-                "running";
-
-
-            console.log(
-                "Cá tiếp tục bơi theo route"
-            );
-        };
-
-
-    },300);
-}
-
-
-/* =========================
-   XÓA MỒI XEM TRƯỚC
-========================= */
-
-function removePreview(){
-
-    if(baitPreview){
-
+    if (baitPreview) {
         baitPreview.remove();
-
         baitPreview = null;
     }
 }
 
 
-/* =========================
-   DI CHUỘT TRONG HỒ
-========================= */
+// ================================
+// MỒI ĐI THEO CHUỘT
+// ================================
 
-aquarium.addEventListener(
-    "mousemove",
-    function(e){
+aquarium.addEventListener("mousemove", function (event) {
 
-        if(feedMode){
+    if (!feedMode || !baitPreview) return;
 
-            previewBait(e);
-        }
-    }
-);
+    const rect = aquarium.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    baitPreview.style.left = x + "px";
+    baitPreview.style.top = y + "px";
+});
 
 
-/* =========================
-   CLICK THẢ MỒI
-========================= */
+// ================================
+// CLICK → THẢ MỒI
+// ================================
 
-aquarium.addEventListener(
-    "click",
-    function(e){
+aquarium.addEventListener("click", function (event) {
 
-        if(feedMode){
+    if (!feedMode) return;
 
-            dropBait(e);
-        }
-    }
-);
+    const rect = aquarium.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    createBait(x, y);
+});
+
+
+// ================================
+// TẠO MỒI VÀ CHO RƠI XUỐNG
+// ================================
+
+function createBait(x, y) {
+
+    const bait = document.createElement("div");
+
+    bait.className = "bait";
+
+    bait.style.left = x + "px";
+    bait.style.top = y + "px";
+
+    aquarium.appendChild(bait);
+
+    baits.push(bait);
+
+    // Cho mồi rơi xuống
+    dropBait(bait);
+}
+
+
+// ================================
+// HIỆU ỨNG MỒI RƠI
+// ================================
+
+function dropBait(bait) {
+
+    const aquariumHeight = aquarium.clientHeight;
+
+    // Chiều cao phần cát
+    const sandHeight = aquariumHeight * 0.20;
+
+    // Vị trí đáy của mồi
+    const bottomPosition =
+        aquariumHeight - sandHeight - 20;
+
+    const currentTop = parseFloat(bait.style.top);
+
+    const fallDistance = bottomPosition - currentTop;
+
+    // Nếu click quá thấp thì không cần rơi
+    if (fallDistance <= 0) return;
+
+    const duration = Math.max(
+        500,
+        Math.min(2000, fallDistance * 3)
+    );
+
+    bait.style.transition =
+        `top ${duration}ms ease-in`;
+
+    bait.style.top =
+        bottomPosition + "px";
+
+    // Khi rơi xong
+    setTimeout(function () {
+
+        bait.style.transition = "none";
+
+    }, duration);
+}
+
+
+// ================================
+// KIỂM TRA CÁ ĂN MỒI
+// ================================
+
+function checkFishEat() {
+
+    const fishes = document.querySelectorAll(".fish");
+
+    fishes.forEach(function (fish) {
+
+        const fishRect = fish.getBoundingClientRect();
+
+        const fishX =
+            fishRect.left + fishRect.width / 2;
+
+        const fishY =
+            fishRect.top + fishRect.height / 2;
+
+
+        baits.forEach(function (bait, index) {
+
+            const baitRect =
+                bait.getBoundingClientRect();
+
+            const baitX =
+                baitRect.left + baitRect.width / 2;
+
+            const baitY =
+                baitRect.top + baitRect.height / 2;
+
+
+            const distance = Math.sqrt(
+                Math.pow(fishX - baitX, 2) +
+                Math.pow(fishY - baitY, 2)
+            );
+
+
+            // Cá đến gần mồi
+            if (distance < 100) {
+
+                bait.remove();
+
+                baits.splice(index, 1);
+
+                // Hiệu ứng cá ăn
+                fish.classList.add("eating");
+
+                setTimeout(function () {
+                    fish.classList.remove("eating");
+                }, 500);
+            }
+
+        });
+
+    });
+}
+
+
+// ================================
+// KIỂM TRA LIÊN TỤC
+// ================================
+
+setInterval(checkFishEat, 100);
